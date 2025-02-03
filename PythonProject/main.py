@@ -1,7 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-n=np.abs(-4)
-print(n)
-plt.show()
-#test
+#1. Chargez les données des deux fichiers en mémoire à l’aide de la librairie Numpy.
+np.genfromtxt("")
