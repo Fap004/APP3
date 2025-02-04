@@ -9,6 +9,8 @@ def lecture_donnees(nfichier1,nfichier2) :
 
     tableau1 = np.genfromtxt(tab1,delimiter=',')
     tableau2 = np.genfromtxt(tab2,delimiter=',')
+
+
     return tableau1, tableau2
 #2.+ 3. création dun premier 1er hist et nom axes et titre
 def hist1():
