@@ -4,8 +4,11 @@ import matplotlib.pyplot as plt
 
 #1. Lecture des données des deux .csv en mémoire avEc Numpy.
 def lecture_donnees(nfichier1,nfichier2) :
-    tableau1 = np.genfromtxt(nfichier1,delimiter=',')
-    tableau2 = np.genfromtxt(nfichier2,delimiter=',')
+    tab1 = np.genfromtxt(nfichier1,dtype=str,delimiter='/n')
+    tab2 = np.genfromtxt(nfichier2,dtype=str,delimiter='/n')
+
+    tableau1 = np.genfromtxt(tab1,delimiter=',')
+    tableau2 = np.genfromtxt(tab2,delimiter=',')
     return tableau1, tableau2
 #2.+ 3. création dun premier 1er hist et nom axes et titre
 def hist1():
@@ -23,7 +26,11 @@ def hist2():
     histogramme1,histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv', 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
     hist1corrige= histogramme1[:,2]
     hist2corrige =histogramme2[:,2]
-    bins = np.logspace(np.log10(1), np.log10(1000), num=50)
+    #histo=np.logspace(histogramme2[:,2],num=1000)
+    bins = np.logspace(1, 3, num=25)
+
+
+    print(concidence(histogramme1,histogramme2))
 
     plt.figure()
     #plt.xlim(0,300)
@@ -38,6 +45,23 @@ def hist2():
     plt.grid()
     plt.show()
 
-
+def concidence(h1,h2):
+    temps=50
+    i=0
+    y=0
+    z=0
+    for h1 in h1 :
+        if h2[y][1]<=h1[i][1]+temps and h1[i][1]<=h2[y][1]+temps:
+            if h2[y][2]<h1[i][2]:
+                hS[z]=h2[y][2]
+                z+=1
+            if h1[i][2]<h2[y][2]:
+                hS[z]=h1[i][2]
+                z += 1
+        elif h2[y][1]<= h1[i][1]:
+            y+=1
+        elif h1[i][1]< h2[y][1]:
+            i+=1
+    return hS[z]
 hist2()
 
