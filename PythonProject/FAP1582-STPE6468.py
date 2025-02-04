@@ -21,18 +21,20 @@ def hist1():
 
 def hist2():
     histogramme1,histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv', 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
-    hist1corrige= np.log10(histogramme1[:,2])
-    hist2corrige = np.log10(histogramme2[:,2])
+    hist1corrige= histogramme1[:,2]
+    hist2corrige =histogramme2[:,2]
+    bins = np.logspace(np.log10(1), np.log10(1000), num=50)
 
     plt.figure()
     #plt.xlim(0,300)
     #plt.ylim(0,3000)       plus beau sans les limites
-                                                # pas utile : plt.plot(histogramme) car on fait l'histogramme
+    # pas utile : plt.plot(histogramme) car on fait l'histogramme
     plt.title('histogramme amplitude')
     plt.xlabel('amplitude(mV)')
     plt.ylabel('quantité')
-    plt.hist(hist1corrige)    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
-    plt.hist(hist2corrige)
+    plt.semilogx()
+    plt.hist(hist1corrige,bins=bins,histtype="step")    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
+    plt.hist(hist2corrige,bins=bins,histtype="step")
     plt.grid()
     plt.show()
 

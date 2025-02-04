@@ -1,5 +1,5 @@
 # Données du premier détecteur
-# Index,temps(ms), tension(mV), temps mort (ms), température
+# 0Index,1temps(ms), 2tension(mV), 3temps mort (ms), 4température
 1,2066.745,69,123,19
 2,2304.573,54,113,19
 3,3387.593,32,114,16
