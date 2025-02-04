@@ -55,11 +55,11 @@ def concidence(h1,h2):
     while i < len(h1) and y < len(h2):
         if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:
             if h2[y][2] <= h1[i][2]:
-                hS.append(h2[y][2])  # Utiliser append pour ajouter à la liste
+                hS.append((h2[y][1], h2[y][2]))  # Utiliser append pour ajouter à la liste
                 y+=1
                 i+=1
             elif h1[i][2] < h2[y][2]:
-                hS.append(h1[i][2])  # Utiliser append pour ajouter à la liste
+                hS.append((h1[y][1], h1[y][2]))  # Utiliser append pour ajouter à la liste
                 y += 1
                 i += 1
         elif h2[y][1] < h1[i][1]:
@@ -67,6 +67,7 @@ def concidence(h1,h2):
         elif h1[i][1] < h2[y][1]:
             i += 1
     print(len(hS))
+    print(hS[1290][0],hS[1290][1])
     print('fini')
     return hS  # Retourner toute la liste
 concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
