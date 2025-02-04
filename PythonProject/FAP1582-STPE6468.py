@@ -4,11 +4,11 @@ import matplotlib.pyplot as plt
 
 #1. Lecture des données des deux .csv en mémoire avEc Numpy.
 def lecture_donnees(nfichier1,nfichier2) :
-    tab1 = np.genfromtxt(nfichier1,dtype=str,delimiter='/n')
-    tab2 = np.genfromtxt(nfichier2,dtype=str,delimiter='/n')
+    tableau1 = np.genfromtxt(nfichier1,delimiter=',')
+    tableau2 = np.genfromtxt(nfichier2,delimiter=',')
 
-    tableau1 = np.genfromtxt(tab1,delimiter=',')
-    tableau2 = np.genfromtxt(tab2,delimiter=',')
+    #tableau1 = np.genfromtxt(tab1,delimiter=',')
+    #tableau2 = np.genfromtxt(tab2,delimiter=',')
 
 
     return tableau1, tableau2
@@ -32,7 +32,7 @@ def hist2():
     bins = np.logspace(1, 3, num=25)
 
 
-    print(concidence(histogramme1,histogramme2))
+    hS=concidence(histogramme1,histogramme2)
 
     plt.figure()
     #plt.xlim(0,300)
@@ -48,22 +48,26 @@ def hist2():
     plt.show()
 
 def concidence(h1,h2):
-    temps=50
-    i=0
-    y=0
-    z=0
-    for h1 in h1 :
-        if h2[y][1]<=h1[i][1]+temps and h1[i][1]<=h2[y][1]+temps:
-            if h2[y][2]<h1[i][2]:
-                hS[z]=h2[y][2]
-                z+=1
-            if h1[i][2]<h2[y][2]:
-                hS[z]=h1[i][2]
-                z += 1
-        elif h2[y][1]<= h1[i][1]:
-            y+=1
-        elif h1[i][1]< h2[y][1]:
-            i+=1
-    return hS[z]
-hist2()
+    temps = 0.1
+    i = 0
+    y = 0
+    hS = []  # Liste pour stocker les résultats
+    while i < len(h1) and y < len(h2):
+        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:
+            if h2[y][2] <= h1[i][2]:
+                hS.append(h2[y][2])  # Utiliser append pour ajouter à la liste
+                y+=1
+                i+=1
+            elif h1[i][2] < h2[y][2]:
+                hS.append(h1[i][2])  # Utiliser append pour ajouter à la liste
+                y += 1
+                i += 1
+        elif h2[y][1] < h1[i][1]:
+            y += 1
+        elif h1[i][1] < h2[y][1]:
+            i += 1
+    print(len(hS))
+    print('fini')
+    return hS  # Retourner toute la liste
+concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
 
