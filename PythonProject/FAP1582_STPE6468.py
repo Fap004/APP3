@@ -81,7 +81,7 @@ def hist3():
     plt.show()
 
 def concidence(h1,h2):
-    temps = 0.1
+    temps = 0.01
     i = 0
     y = 0
     hS = []  # Liste pour stocker les résultats
@@ -92,12 +92,10 @@ def concidence(h1,h2):
                 hS.append((h2[y][1], h2[y][2]))  # Utiliser append pour ajouter à la liste
                 y+=1
                 i+=1
-                print(i, y)
             elif h1[i][2] < h2[y][2]:
                 hS.append((h1[i][1], h1[i][2]))  # Utiliser append pour ajouter à la liste
                 y += 1
                 i += 1
-                print(i,y)
         elif h2[y][1] < h1[i][1]:
             y += 1
             #hN.append((h2[y][1], h2[y][2]))
@@ -105,12 +103,12 @@ def concidence(h1,h2):
             hN.append((h1[i][1], h1[i][2]))
             i += 1
 
-    print(y,i)
-    print(len(hS))
-    print(len(hN))
-    print(len(h1))
-    print(hS[1290][0],hS[1290][1])
-    print('fini')
+    #print(y,i)
+    #print(len(hS))
+    #print(len(hN))
+    #print(len(h1))
+    #print(hS[1290][0],hS[1290][1])
+    #print('fini')
     return hS, hN # Retourner toute la liste
     #concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
 #hist3()
