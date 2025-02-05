@@ -59,8 +59,6 @@ def hist3():
     #histo=np.logspace(histogramme2[:,2],num=1000)
     bins = np.logspace(1, 3, num=25)
 
-    hS=[]
-    hN=[]
     hS,hN=concidence(histogramme1,histogramme2)
     hist3 = [item[1] for item in hS]
     hist4 = [item[1] for item in hN]
@@ -95,14 +93,17 @@ def concidence(h1,h2):
                 y+=1
                 i+=1
             elif h1[i][2] < h2[y][2]:
-                hS.append((h1[y][1], h1[y][2]))  # Utiliser append pour ajouter à la liste
+                hS.append((h1[i][1], h1[i][2]))  # Utiliser append pour ajouter à la liste
                 y += 1
                 i += 1
         elif h2[y][1] < h1[i][1]:
             y += 1
+            #hN.append((h2[y][1], h2[y][2]))
         elif h1[i][1] < h2[y][1]:
+            hN.append((h1[i][1], h1[i][2]))
             i += 1
-            hN.append((h1[y][1], h1[y][2]))
+
+    print(y,i)
     print(len(hS))
     print(len(hN))
     print(len(h1))
