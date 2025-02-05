@@ -2,6 +2,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+
+
+
 #1. Lecture des données des deux .csv en mémoire avEc Numpy.
 def lecture_donnees(nfichier1,nfichier2) :
     tableau1 = np.genfromtxt(nfichier1,delimiter=',')
@@ -27,8 +30,6 @@ def hist1():
 def hist2():
     histogramme1,histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv', 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
     histogramme= np.concatenate((histogramme1,histogramme2), axis=0)
-    hist1corrige= histogramme1[:,2]
-    hist2corrige =histogramme2[:,2]
     #histo=np.logspace(histogramme2[:,2],num=1000)
     bins = np.logspace(1, 3, num=25)
 
@@ -44,8 +45,24 @@ def hist2():
     plt.xlabel('amplitude(mV)')
     plt.ylabel('quantité')
     plt.semilogx()
-    plt.hist(histogramme[:,2],bins=bins,histtype="step")    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
-    plt.hist(hist2corrige,bins=bins,histtype="step")
+    y, bin_edges, _ = plt.hist(histogramme[:, 2], bins=bins)    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
+
+    #erreur
+    bins_center=(bin_edges[1:]+bin_edges[:-1])/2
+
+
+    erreur=np.sqrt(np.average(histogramme[:,3])/len(histogramme))/np.average(histogramme[:,3])
+    plt.errorbar(bins_center,y,yerr=erreur)
+
+
+
+
+
+
+
+
+
+    #plt.hist(histogramme1[:,2],bins=bins,histtype="step")
     #plt.hist(hist3, bins=bins, histtype="step")
     plt.grid()
     plt.show()
@@ -111,4 +128,64 @@ def concidence(h1,h2):
     print('fini')
     return hS, hN # Retourner toute la liste
     #concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
-hist3()
+
+
+def hist122():
+    histogramme1, histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv',
+                                                 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
+    histogramme = np.concatenate((histogramme1, histogramme2), axis=0)
+    bins = np.logspace(1, 3, num=25)
+
+    hS, hN = concidence(histogramme1, histogramme2)
+    histogrammecoincidence = [item[1] for item in hS]
+    histogrammenoncoincidence = [item[1] for item in hN]
+
+    plt.hist(histogramme[:,2], bins=bins, histtype="step",label="Tous les évenements")
+    y, bin_edges, _ = plt.hist(histogrammecoincidence, bins=bins, histtype="step", label="Coincident")
+    plt.hist(histogrammenoncoincidence, bins=bins, histtype="step", label="Non-coincident")
+
+    erreur = np.std(histogramme[:,3]) / np.sqrt(len(histogramme))
+    bin_center = 0.5*(bin_edges[1:] + bin_edges[:-1])
+    plt.errorbar(bin_center,y,yerr=erreur)
+
+    plt.semilogx()
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+
+def hist123():
+    # Lecture des données
+    histogramme1, histogramme2 = lecture_donnees(
+        'S2GE_APP3_Problematique_Detecteur_Primaire.csv',
+        'S2GE_APP3_Problematique_Detecteur_Secondaire.csv'
+    )
+    histogramme = np.concatenate((histogramme1, histogramme2), axis=0)
+    bins = np.logspace(1, 3, num=25)
+
+    # Extraction des événements coïncidents et non coïncidents
+    hS, hN = concidence(histogramme1, histogramme2)
+    histogrammecoincidence = [item[1] for item in hS]
+    histogrammenoncoincidence = [item[1] for item in hN]
+
+    # Histogrammes
+    plt.hist(histogramme[:, 2], bins=bins, histtype="step", label="Tous les événements")
+    y, bin_edges, _ = plt.hist(histogrammecoincidence, bins=bins, histtype="step", label="Coïncidents")
+    plt.hist(histogrammenoncoincidence, bins=bins, histtype="step", label="Non-coïncidents")
+
+    # Correction du calcul des erreurs
+    erreur = np.sqrt(y)  # Erreur de Poisson (correcte)
+
+    # Calcul des centres des bins
+    bin_center = 0.5 * (bin_edges[1:] + bin_edges[:-1])
+
+    # Ajout des barres d'erreur
+    plt.errorbar(bin_center, y, yerr=erreur, fmt='o', color='red', capsize=3)
+
+    # Mise en forme du graphique
+    plt.xscale("log")  # Remplace plt.semilogx()
+    plt.legend()
+    plt.grid()
+    plt.show()
+
+hist122()
