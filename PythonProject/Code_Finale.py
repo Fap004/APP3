@@ -1,15 +1,18 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
-from FAP1582_STPE6468 import concidence
+from FAP1582_STPE6468 import coincidence
 
 def histogramme(error,fichier):
     donneesCompletes1 = np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=',')
     donneesCompletes2 = np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=',')
 
-    hS, hN = concidence(donneesCompletes1, donneesCompletes2)
+    hS, hN= coincidence(donneesCompletes1, donneesCompletes2)
     tempsTotal= (donneesCompletes1[-1][1]-donneesCompletes1[0][1])/1000
-    tempsMort=np.sum(donneesCompletes1[:,3])/1000
+    tempsMort= np.sum(donneesCompletes1[:,3])/1000
+    moyTempsMort= tempsMort/len(donneesCompletes1)
+    erreur= np.sqrt(moyTempsMort/len(donneesCompletes1))
+
     tempsActif=tempsTotal-tempsMort
     print(tempsTotal)
     histogramme1 = donneesCompletes1[:, 2]
@@ -26,25 +29,31 @@ def histogramme(error,fichier):
     plt.xlabel('amplitude(mV)')
     plt.ylabel('Rate/bin[S-1]')
     plt.semilogx()
-    #plt.errorbar(1000, 2000)
     plt.grid()
 
     if error:
         plt.hist(histogramme1, bins=bins, histtype="step", weights = (1 / tempsActif) * np.ones_like(histogramme1),label="Tous les évenements")
-        plt.hist(histogramme3, bins=bins, histtype="step",weights = (1 / tempsActif) * np.ones_like(histogramme3), label="Coincident")
+        y,edge, _= plt.hist(histogramme3, bins=bins, histtype="step",weights = (1 / tempsActif) * np.ones_like(histogramme3), label="Coincident")
         plt.hist(histogramme4, bins=bins, histtype="step", weights = (1 / tempsActif) * np.ones_like(histogramme4), label="Autres")
         plt.title('histogramme amplitude corrigé')
+
+        centre = (edge[:-1] + edge[1:]) / 2
+        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='orange', label='erreur sur la coincidence')
+
         plt.legend()
         if fichier:
-            print("grosse bitch")
             plt.savefig("PAIF1582,STPE6468--corrige")
         else:
             plt.show()
     else:
         plt.hist(histogramme1, bins=bins, histtype="step", weights = (1 / tempsTotal) * np.ones_like(histogramme1),label="Tous les évenements")
-        plt.hist(histogramme3, bins=bins, histtype="step",weights = (1 / tempsTotal) * np.ones_like(histogramme3), label="Coincident")
+        y,edge, _= plt.hist(histogramme3, bins=bins, histtype="step",weights = (1 / tempsTotal) * np.ones_like(histogramme3), label="Coincident")
         plt.hist(histogramme4, bins=bins, histtype="step", weights = (1 / tempsTotal) * np.ones_like(histogramme4), label="Autres")
         plt.title('histogramme amplitude non-corrigé')
+
+        centre = (edge[:-1] + edge[1:]) / 2
+        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='orange', label='erreur sur la coincidence')
+
         plt.legend()
         if fichier:
             plt.savefig("PAIF1582,STPE6468")
