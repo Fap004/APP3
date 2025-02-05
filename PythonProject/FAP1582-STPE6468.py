@@ -26,13 +26,15 @@ def hist1():
 
 def hist2():
     histogramme1,histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv', 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
+    histogramme= np.concatenate((histogramme1,histogramme2), axis=0)
     hist1corrige= histogramme1[:,2]
     hist2corrige =histogramme2[:,2]
     #histo=np.logspace(histogramme2[:,2],num=1000)
     bins = np.logspace(1, 3, num=25)
 
-
-    hS=concidence(histogramme1,histogramme2)
+    #hS=[]
+    #hS=concidence(histogramme1,histogramme2)
+    #hist3 = [item[1] for item in hS]
 
     plt.figure()
     #plt.xlim(0,300)
@@ -42,8 +44,41 @@ def hist2():
     plt.xlabel('amplitude(mV)')
     plt.ylabel('quantité')
     plt.semilogx()
-    plt.hist(hist1corrige,bins=bins,histtype="step")    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
+    plt.hist(histogramme[:,2],bins=bins,histtype="step")    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
     plt.hist(hist2corrige,bins=bins,histtype="step")
+    #plt.hist(hist3, bins=bins, histtype="step")
+    plt.grid()
+    plt.show()
+
+
+def hist3():
+    histogramme1,histogramme2 = lecture_donnees('S2GE_APP3_Problematique_Detecteur_Primaire.csv', 'S2GE_APP3_Problematique_Detecteur_Secondaire.csv')
+    #histogramme= np.concatenate((histogramme1,histogramme2), axis=0)
+    hist1corrige= histogramme1[:,2]
+    #hist2corrige =histogramme2[:,2]
+    #histo=np.logspace(histogramme2[:,2],num=1000)
+    bins = np.logspace(1, 3, num=25)
+
+    hS=[]
+    hN=[]
+    hS,hN=concidence(histogramme1,histogramme2)
+    hist3 = [item[1] for item in hS]
+    hist4 = [item[1] for item in hN]
+
+
+    plt.figure()
+    #plt.xlim(0,300)
+    #plt.ylim(0,3000)       plus beau sans les limites
+    # pas utile : plt.plot(histogramme) car on fait l'histogramme
+    plt.title('histogramme amplitude')
+    plt.xlabel('amplitude(mV)')
+    plt.ylabel('quantité')
+    plt.semilogx()
+    plt.hist(hist1corrige,bins=bins,histtype="step",label="Tous les évenements")    #plt.hist(hist1corrige,bins=1000) pas de bins est plus beau
+    plt.hist(hist3, bins=bins, histtype="step",label="Coincident")
+    plt.hist(hist4, bins=bins, histtype="step",label="Autres")
+    plt.errorbar(1000,2000)
+    plt.legend()
     plt.grid()
     plt.show()
 
@@ -52,6 +87,7 @@ def concidence(h1,h2):
     i = 0
     y = 0
     hS = []  # Liste pour stocker les résultats
+    hN =[] # Liste pour stocker les résultats non concident
     while i < len(h1) and y < len(h2):
         if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:
             if h2[y][2] <= h1[i][2]:
@@ -66,9 +102,12 @@ def concidence(h1,h2):
             y += 1
         elif h1[i][1] < h2[y][1]:
             i += 1
+            hN.append((h1[y][1], h1[y][2]))
     print(len(hS))
+    print(len(hN))
+    print(len(h1))
     print(hS[1290][0],hS[1290][1])
     print('fini')
-    return hS  # Retourner toute la liste
-concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
-
+    return hS, hN # Retourner toute la liste
+    #concidence(np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=','), np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=','))
+hist3()
