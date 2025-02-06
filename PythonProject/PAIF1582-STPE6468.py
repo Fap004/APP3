@@ -3,13 +3,13 @@ import matplotlib.pyplot as plt
 import argparse
 
 def coincidence(h1,h2):
-    temps = 0.12
+    temps = 0.01
     i = 0
     y = 0
     hC = []  # Liste pour stocker les résultats
     hN =[] # Liste pour stocker les résultats non concident
     while i < len(h1) and y < len(h2):
-        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:   #est-ce qu'on pourrait utiliser le temps mort à la case recherché avec if h2[y][1] <= h1[i][1] + h1[i][3] and h1[i][1] <= h2[y][1] + h2[i][3]:
+        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:
             if h2[y][2] <= h1[i][2]:
                 hC.append((h2[y][1], h2[y][2]))  # Utiliser append pour ajouter à la liste
                 y+=1
@@ -25,7 +25,6 @@ def coincidence(h1,h2):
             i += 1
     return hC, hN
 
-
 def histogramme(error,fichier):
     donneesCompletes1 = np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=',')
     donneesCompletes2 = np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Secondaire.csv',delimiter=',')
@@ -36,12 +35,10 @@ def histogramme(error,fichier):
     moyTempsMort= tempsMort/len(donneesCompletes1)
 
     tempsActif=tempsTotal-tempsMort
-    print(tempsTotal)
     histogramme1 = donneesCompletes1[:, 2]
     histogramme2 = donneesCompletes2[:, 2]
     histogramme3 = [item[1] for item in hS]
     histogramme4 = [item[1] for item in hN]
-    print(len(histogramme3))
     bins = np.logspace(1, 3, num=25)
 
     plt.figure()
