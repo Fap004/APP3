@@ -11,7 +11,6 @@ def histogramme(error,fichier):
     tempsTotal= (donneesCompletes1[-1][1]-donneesCompletes1[0][1])/1000
     tempsMort= np.sum(donneesCompletes1[:,3])/1000
     moyTempsMort= tempsMort/len(donneesCompletes1)
-    erreur= np.sqrt(moyTempsMort/len(donneesCompletes1))
 
     tempsActif=tempsTotal-tempsMort
     print(tempsTotal)
@@ -21,9 +20,6 @@ def histogramme(error,fichier):
     histogramme4 = [item[1] for item in hN]
     print(len(histogramme3))
     bins = np.logspace(1, 3, num=25)
-
-
-
 
     plt.figure()
     plt.xlabel('amplitude(mV)')
@@ -37,8 +33,9 @@ def histogramme(error,fichier):
         plt.hist(histogramme4, bins=bins, histtype="step", weights = (1 / tempsActif) * np.ones_like(histogramme4), label="Autres")
         plt.title('histogramme amplitude corrigé')
 
+        erreur = 2*100*(np.sqrt(y)/(tempsActif))
         centre = (edge[:-1] + edge[1:]) / 2
-        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='orange', label='erreur sur la coincidence')
+        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='pink', label='erreur sur la coincidence')
 
         plt.legend()
         if fichier:
@@ -51,8 +48,9 @@ def histogramme(error,fichier):
         plt.hist(histogramme4, bins=bins, histtype="step", weights = (1 / tempsTotal) * np.ones_like(histogramme4), label="Autres")
         plt.title('histogramme amplitude non-corrigé')
 
+        erreur = 2*100*(np.sqrt(y) / (tempsTotal))
         centre = (edge[:-1] + edge[1:]) / 2
-        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='orange', label='erreur sur la coincidence')
+        plt.errorbar(centre, y, yerr=erreur, fmt='none', capsize=3, color='pink', label='erreur sur la coincidence')
 
         plt.legend()
         if fichier:
