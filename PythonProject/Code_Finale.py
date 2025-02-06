@@ -65,6 +65,4 @@ parser.add_argument('-F','--fichier', action='store_true',help='0=print à écra
 parser.add_argument('-T','--temps-mort', action='store_true',help='0=sans barre d erreur, 1=barre d erreurs')
 args = parser.parse_args()
 
-
-
 histogramme(args.temps_mort,args.fichier)

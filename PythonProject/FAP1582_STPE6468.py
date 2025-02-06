@@ -86,13 +86,13 @@ def hist3():
     plt.show()
 
 def coincidence(h1,h2):
-    temps = 0.01
+    temps = 0.12
     i = 0
     y = 0
     hS = []  # Liste pour stocker les résultats
     hN =[] # Liste pour stocker les résultats non concident
     while i < len(h1) and y < len(h2):
-        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:
+        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:   #est-ce qu'on pourrait utiliser le temps mort à la case recherché avec if h2[y][1] <= h1[i][1] + h1[i][3] and h1[i][1] <= h2[y][1] + h2[i][3]:
             if h2[y][2] <= h1[i][2]:
                 hS.append((h2[y][1], h2[y][2]))  # Utiliser append pour ajouter à la liste
                 y+=1
