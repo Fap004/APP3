@@ -59,7 +59,7 @@ def histogramme(error,fichier):
 
         plt.legend()
         if fichier:
-            plt.savefig("PAIF1582,STPE6468--corrige")
+            plt.savefig("PAIF1582-STPE6468--corrige")
         else:
             plt.show()
     else:
@@ -74,7 +74,7 @@ def histogramme(error,fichier):
 
         plt.legend()
         if fichier:
-            plt.savefig("PAIF1582,STPE6468")
+            plt.savefig("PAIF1582-STPE6468")
         else:
             plt.show()
 
