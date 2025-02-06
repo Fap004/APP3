@@ -1,7 +1,30 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import argparse
-from FAP1582_STPE6468 import coincidence
+
+def coincidence(h1,h2):
+    temps = 0.12
+    i = 0
+    y = 0
+    hC = []  # Liste pour stocker les résultats
+    hN =[] # Liste pour stocker les résultats non concident
+    while i < len(h1) and y < len(h2):
+        if h2[y][1] <= h1[i][1] + temps and h1[i][1] <= h2[y][1] + temps:   #est-ce qu'on pourrait utiliser le temps mort à la case recherché avec if h2[y][1] <= h1[i][1] + h1[i][3] and h1[i][1] <= h2[y][1] + h2[i][3]:
+            if h2[y][2] <= h1[i][2]:
+                hC.append((h2[y][1], h2[y][2]))  # Utiliser append pour ajouter à la liste
+                y+=1
+                i+=1
+            elif h1[i][2] < h2[y][2]:
+                hC.append((h1[i][1], h1[i][2]))  # Utiliser append pour ajouter à la liste
+                y += 1
+                i += 1
+        elif h2[y][1] < h1[i][1]:
+            y += 1
+        elif h1[i][1] < h2[y][1]:
+            hN.append((h1[i][1], h1[i][2]))
+            i += 1
+    return hC, hN
+
 
 def histogramme(error,fichier):
     donneesCompletes1 = np.genfromtxt('S2GE_APP3_Problematique_Detecteur_Primaire.csv',delimiter=',')
@@ -57,6 +80,7 @@ def histogramme(error,fichier):
             plt.savefig("PAIF1582,STPE6468")
         else:
             plt.show()
+
 
 parser=argparse.ArgumentParser(description='Fichier et temps mort')
 parser.add_argument('-F','--fichier', action='store_true',help='0=print à écran, 1=print en png')
